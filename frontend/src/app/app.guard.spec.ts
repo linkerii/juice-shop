@@ -40,16 +40,23 @@ describe('LoginGuard', () => {
         expect(guard.canActivate()).toBe(false)
     })
 
-    it('returns payload from decoding a valid JWT', () => {
-        const guard = TestBed.inject(LoginGuard)
+it('returns payload from decoding a valid JWT', () => {
+    const guard = TestBed.inject(LoginGuard)
 
-        localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c')
-        expect(guard.tokenDecode()).toEqual({
-            sub: '1234567890',
-            name: 'John Doe',
-            iat: 1516239022
-        })
+    const toBase64Url = (obj: object) =>
+      btoa(JSON.stringify(obj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+    const fakeToken = [
+      toBase64Url({ alg: 'HS256', typ: 'JWT' }),
+      toBase64Url({ sub: '1234567890', name: 'John Doe', iat: 1516239022 }),
+      'test-signature'
+    ].join('.')
+    localStorage.setItem('token', fakeToken)
+    expect(guard.tokenDecode()).toEqual({
+      sub: '1234567890',
+      name: 'John Doe',
+      iat: 1516239022
     })
+})
 
     it('returns nothing when decoding an invalid JWT', () => {
         const guard = TestBed.inject(LoginGuard)
