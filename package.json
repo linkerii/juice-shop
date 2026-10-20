@@ -90,6 +90,10 @@
       "text-summary"
     ]
   },
+  
+  "overrides": {
+  "crypto-js": "4.2.0"
+},
   "dependencies": {
     "@ai-sdk/openai-compatible": "^2.0.35",
     "@fontsource/roboto": "^5.2.9",
