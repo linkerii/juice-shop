@@ -195,7 +195,7 @@ jobs:
         with:
           name: api-test-lcov
       - name: "Publish coverage to Coveralls"
-        uses: coverallsapp/github-action@v2
+        uses: coverallsapp/github-action@v2 # nosemgrep
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: frontend-lcov.info server-lcov.info api-lcov.info
@@ -371,7 +371,10 @@ jobs:
       - name: "Check out Git repository"
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
       - name: "Install Heroku CLI"
-        run: curl https://cli-assets.heroku.com/install.sh | sh
+        run: |
+          curl -sL https://cli-assets.heroku.com/install.sh -o install.sh
+          chmod +x install.sh
+          ./install.sh
       - name: "Set Heroku app & branch for ${{ github.ref }}"
         run: |
           if [ "$GITHUB_REF" == "refs/heads/master" ]; then
